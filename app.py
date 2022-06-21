@@ -11,16 +11,16 @@ app = Flask(__name__)
 # rendering (html 파일 넘겨주기)
 @app.route('/')
 def home():
-    return render_template('main.html')
+    return render_template('mainPage.html')
 
 
 @app.route('/header')
-def home():
+def header():
     return render_template('header.html')
 
 
 @app.route('/footer')
-def home():
+def footer():
     return render_template('footer.html')
 
 
