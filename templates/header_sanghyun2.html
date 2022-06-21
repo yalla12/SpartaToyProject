@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+
+    <title>스파르타코딩클럽 | 부트스트랩 연습하기</title>
+    <style>
+        .footer {
+            display: block;
+            position: fixed;
+            bottom: 10px;
+        }
+
+        .header {
+            display: flex;
+            font-size: 20px;
+            position: absolute;
+            right: 10px;
+        }
+
+        .header > div {
+            margin-top: 10px;
+            margin-right: 10px;
+            border-style: solid;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+
+    </style>
+    <script>
+$(document).ready(function () {
+            listing();
+        });
+
+        function listing() {
+            $('#card-boxs').empty()
+            $.ajax({
+                type: "GET",
+                url: "http://spartacodingclub.shop/web/api/movie",
+                data: {},
+                success: function (response) {
+                    let rows = response['movies']
+                    for (let i = 0; i < rows.length; i++) {
+                        let title = rows[i]['title']
+                        let star = rows[i]['star']
+                        let image = rows[i]['image']
+                        let desc = rows[i]['desc']
+                        let comment = rows[i]['comment']
+
+                        let star_image = '⭐'.repeat(star)
+
+                        let temp_html =
+                            `<div class="col">
+                                <div class="card">
+                                    <img src=${image}
+                                         class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${title}</h5>
+                                        <p class="card-text">${desc}</p>
+                                        <p>${star_image}</p>
+                                        <p class="myComment">${comment}</p>
+                                    </div>
+                                </div>
+                            </div>`
+
+                    }
+                }
+            })
+        }
+
+    </script>
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <div>
+            <span class="nav">
+                <a href="http://www.naver.com">home</a>
+            </span>
+        </div>
+        <div>
+            <span class="nav"><a href="http://www.naver.com">login</a></span>
+        </div>
+        <div>
+            <span class="nav"><a href="http://www.naver.com">myProfile</a></span>
+        </div>
+        <div>
+            <span class="nav"><a href="http://www.naver.com">logout</a></span>
+        </div>
+    </div>
+
+</header>
+
+<div id="card-boxs"->
+
+</div>
+
+
+<footer class="footer">
+    <nav>
+        <p>만든조: 11조</p>
+    </nav>
+    <nav>
+        <p>항해 8기</p>
+    </nav>
+    <nav>
+        <p></p>
+    </nav>
+</footer>
+</body>
+
+</html>
