@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <title>스파르타코딩클럽 | 부트스트랩 연습하기</title>
+    <style>
+        .nav-link {
+           color: black;
+            font-size: 20px;
+        }
+
+        .footer {
+            display: block;
+            position: fixed;
+            bottom: 10px;
+        }
+    </style>
+    <script>
+        $.ajax({
+            type: "GET",
+            url: "http://spartacodingclub.shop/sparta_api/seoulair",
+            data: {},
+            success: function (response) {
+                console.log(response)
+            }
+        })
+    </script>
+</head>
+
+<body>
+<header class="head">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">myProfile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled">logOut</a>
+        </li>
+    </ul>
+</header>
+
+<div>
+
+
+</div>
+
+
+<footer class="footer">
+    <nav>
+        <p>만든조: 11조</p>
+    </nav>
+    <nav>
+        <p>항해 8기</p>
+    </nav>
+    <nav>
+        <p></p>
+    </nav>
+</footer>
+</body>
+
+</html>
