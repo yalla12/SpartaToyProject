@@ -150,9 +150,10 @@
     })
     function movie_info_insert(response) {
         for (let i = 0; i < response.length - 1; i++) {
-            let image = response[i]['image']
-            let title = response[i]['title']
-            let booking_rate = response[i]['booking_rate']
+            let image = response[i]['포스터']
+            let title = response[i]['영화제목']
+            let booking_rate = response[i]['예매율']
+            let rank=response[i]['순위']
 
             if (title.length >= 13) {
                 title = title.substring(0, 13) + "..."
@@ -166,13 +167,13 @@
                         <p class="card-text">
                         <div class="card-detail">${(i + 1) + "." + title}</div>
                         <div class="card-detail">
-                            <span>${booking_rate}</span>
+                            <span>예매율 : ${booking_rate}</span>
                         </div>
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-outline-secondary text-white">예매하기</button>
-                                <button type="button" class="btn btn-outline-secondary text-white">상세정보</button>
+                                <button onclick="move_movie_info(${rank})" type="button" class="btn btn-outline-secondary text-white">상세정보</button>
                             </div>
 
                         </div>
@@ -203,6 +204,9 @@
                 }
             }
         })
+    }
+    function move_movie_info(rank){
+        window.location.href='/movieInfo?rank='+rank
     }
 </script>
 
