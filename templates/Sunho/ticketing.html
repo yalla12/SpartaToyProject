@@ -12,6 +12,8 @@
     <!--JQuery 관련 CDN Link    -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+
+
     <style>
         .mycards {
             margin: 20px auto 0px auto;
@@ -19,6 +21,40 @@
             max-width: 1200px;
         }
     </style>
+
+    <script>
+        function getCheckboxValue(event) {
+            let result = event.target.defaultValue;
+
+            document.getElementById('name').value = result;
+        }
+
+        function  getTimeSelect(event) {
+            let result = event.target.defaultValue;
+
+             document.getElementById('time').value = result;
+
+        }
+
+        function buy() {
+            let name = $('#name').val() // 영화 좌석
+            let time = $('#time').val() // 시간
+            let title = $('#title').val() // 제목
+
+            console.log(name, time, title)
+
+            $.ajax({
+                type: 'POST',
+                url: '/buy',
+                data: {seat_give : name, time_give: time, title_give: title},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            })
+        }
+
+    </script>
 
 </head>
 <body>
@@ -46,37 +82,153 @@
 
             <!-- 상영 시간표-->
             <div class="btn-group-vertical" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onclick="getTimeSelect(event)" value="08:00" >
                 <label class="btn btn-outline-primary" for="btnradio1">08:00</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onclick="getTimeSelect(event)" value="09:00">
                 <label class="btn btn-outline-primary" for="btnradio2">09:00</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onclick="getTimeSelect(event)" value="10:00">
                 <label class="btn btn-outline-primary" for="btnradio3">10:00</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="btnradio1">11:00</label>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio4" autocomplete="off" onclick="getTimeSelect(event)" value="11:00">
+                <label class="btn btn-outline-primary" for="btnradio4">11:00</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio2">12:00</label>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio5" autocomplete="off" onclick="getTimeSelect(event)" value="12:00">
+                <label class="btn btn-outline-primary" for="btnradio5">12:00</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio3">13:00</label>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio6" autocomplete="off" onclick="getTimeSelect(event)" value="13:00">
+                <label class="btn btn-outline-primary" for="btnradio6">13:00</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio7" autocomplete="off" checked>
-                <label class="btn btn-outline-primary" for="btnradio1">14:00</label>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio7" autocomplete="off" onclick="getTimeSelect(event)" value="14:00">
+                <label class="btn btn-outline-primary" for="btnradio7">14:00</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio8" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio2">15:00</label>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio8" autocomplete="off" onclick="getTimeSelect(event)" value="15:00">
+                <label class="btn btn-outline-primary" for="btnradio8">15:00</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="btnradio9" autocomplete="off">
-                <label class="btn btn-outline-primary" for="btnradio3">16:00</label>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio9" autocomplete="off" onclick="getTimeSelect(event)" value="16:00">
+                <label class="btn btn-outline-primary" for="btnradio9">16:00</label>
+
+
             </div>
 
-            
+            <div>
+                <table>
+                    <tr> <h3>좌석을 선택해 주세요</h3> <br></tr>
+                    <tr aria-colspan="3" >
+                        <span class="d-block p-2 bg-dark text-white" style="text-align: center">Screen</span>
+                    </tr>
+                    <tr><br></tr>
+                    <tr>
+                        <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined1" autocomplete="off" onclick="getCheckboxValue(event)" value="A1" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined1">A1</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined2" autocomplete="off" onclick="getCheckboxValue(event)" value="A2" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined2">A2</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined3" autocomplete="off" onclick="getCheckboxValue(event)" value="A3" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined3">A3</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined4" autocomplete="off" onclick="getCheckboxValue(event)" value="A4" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined4">A4</label><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined5" autocomplete="off" onclick="getCheckboxValue(event)" value="B1" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined5">B1</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined6" autocomplete="off" onclick="getCheckboxValue(event)" value="B2" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined6">B2</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined7" autocomplete="off" onclick="getCheckboxValue(event)" value="B3" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined7">B3</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined8" autocomplete="off" onclick="getCheckboxValue(event)" value="B4" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined8">B4</label><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined9" autocomplete="off" onclick="getCheckboxValue(event)" value="C1" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined9">C1</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined10" autocomplete="off" onclick="getCheckboxValue(event)" value="C2" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined10">C2</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined11" autocomplete="off" onclick="getCheckboxValue(event)" value="C3" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined11">C3</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined12" autocomplete="off" onclick="getCheckboxValue(event)" value="C4" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined12">C4</label><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined13" autocomplete="off" onclick="getCheckboxValue(event)" value="D1" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined13">D1</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined14" autocomplete="off" onclick="getCheckboxValue(event)" value="D2" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined14">D2</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined15" autocomplete="off" onclick="getCheckboxValue(event)" value="D3" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined15">D3</label><br>
+                        </td>
+                        <td>
+                            <input type="radio" class="btn-check" id="btn-check-outlined16" autocomplete="off" onclick="getCheckboxValue(event)" value="D4" checked>
+                            <label class="btn btn-outline-primary" for="btn-check-outlined16">D4</label><br>
+                        </td>
+                    </tr>
+
+                </table>
+
+
+            </div>
+
+
+            <div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">영화제목</h5>
+                            <input type="text" id="title" name="title" value="마녀" hidden >
+                            <p class="card-text">
+                                <label for="name">선택 좌석</label>
+                               <input type="text" id="name" name="name" disabled >
+                            </p>
+                            <p>
+                                <label for="time">선택 시간</label>
+                                <input type="text" id="time" name="time" disabled>
+                            </p>
+                            <label>가격</label>
+                            <p ><input type="text" id="price" name="price" value="15000원" disabled>  </p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-primary" id="kakao" style="width: 100%" onclick="buy()">결제하기</button>
+            </div>
+
+
         </div>
     </div>
+</main>
 
 
 <div id="footer">
@@ -89,6 +241,6 @@
         $("#footer").load("./footer");  // 추가 인클루드를 원할 경우 이런식으로 추가하면 된다
     });
 </script>
-<link rel="script" type="text/html" href="header.html">
+<link rel="script" type="text/html" href="../header.html">
 </body>
 </html>
