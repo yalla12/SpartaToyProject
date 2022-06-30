@@ -15,6 +15,10 @@
 
 
     <style>
+        main{
+            background: floralwhite;
+        }
+
         .mycards {
             margin: 20px auto 0px auto;
             width: 95%;
@@ -54,6 +58,23 @@
             })
         }
 
+        $(document).ready(function () {
+            const url = new URLSearchParams(location.search)
+            let image = url.get('image')
+            let title = url.get('title')
+            let rank = url.get('rank')
+            let rate = url.get('rate')
+
+            console.log(title,rank,rate)
+            document.getElementById("movieImage").src=image;
+           $('#movieTitle').text(title);
+           $('#movieDesc').text('순위: '+ rank +'위');
+           $('#movieRate').text('예매율: '+rate);
+           $('#resultTitle').text(title);
+           $('#title').val(title);
+
+        });
+
     </script>
 
 </head>
@@ -69,13 +90,11 @@
             <!-- 상영 영화 -->
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://movie-phinf.pstatic.net/20220615_63/1655270906406BGdFF_JPEG/movie_image.jpg?type=m203_290_2"
-                         class="card-img-top">
+                    <img id="movieImage" src= "" >
                     <div class="card-body">
-                        <h5 class="card-title">영화제목</h5>
-                        <p class="card-text">영화 설명</p>
-                        <p>별점</p>
-                        <p class="mycomment">내용</p>
+                        <h5 class="card-title" id="movieTitle"></h5>
+                        <p class="card-text" id="movieDesc"></p>
+                        <p class="mycomment" id="movieRate"></p>
                     </div>
                 </div>
             </div>
@@ -206,8 +225,8 @@
                 <div class="col">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h5 class="card-title">영화제목</h5>
-                            <input type="text" id="title" name="title" value="마녀" hidden >
+                            <h5 class="card-title" id="resultTitle">영화제목</h5>
+                            <input type="text" id="title" name="title" value="" hidden >
                             <p class="card-text">
                                 <label for="name">선택 좌석</label>
                                <input type="text" id="name" name="name" disabled >
