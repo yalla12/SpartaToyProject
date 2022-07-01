@@ -14,10 +14,6 @@ app = Flask(__name__)
 import requests
 from bs4 import BeautifulSoup
 
-#db연결
-from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:sparta@cluster0.if3gw.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.dbsparta
 
 # rendering (html 파일 넘겨주기)
 @app.route('/')
@@ -27,7 +23,7 @@ def home():
 
 @app.route('/header')
 def header():
-    return render_template('header_hyunjee.html')
+    return render_template('header.html')
 
 
 @app.route('/footer')
