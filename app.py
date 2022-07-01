@@ -70,19 +70,34 @@ def buy():
 
 
 
-@app.route("/login", methods=["POST"])
-def login():
-    # id,pw_give 를 받아와서 doc (db에 저장)
+@app.route("/join", methods=["POST"])
+def join():
+    # id,pw_give 를 받아와서
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
 
+    join_list = list(
+        db.login.find({"id": id_receive}, {'_id': False}))
+    count = len(join_list)
+    if count > 0:
+        return jsonify({'msg': ' 중복된 아이디입니다. '})
+
+    #db에저장
     doc = {
         'id': id_receive,
         'pw': pw_receive,
     }
     db.login.insert_one(doc)
     return jsonify({'msg': '회원가입을 축하드립니다! '
-})
+                    })
+
+@app.route("/loginpage")
+def loginpage():
+    return render_template('login.html')
+
+@app.route("/signuppage")
+def signuppage():
+    return render_template('signup.html')
 
 
 @app.route('/crawling_movie', methods=['GET'])
