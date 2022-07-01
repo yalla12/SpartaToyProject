@@ -20,7 +20,7 @@ def home():
 
 @app.route('/header')
 def header():
-    return render_template('header_hyunjee.html')
+    return render_template('header.html')
 
 
 @app.route('/footer')
