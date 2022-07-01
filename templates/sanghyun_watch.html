@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--부트스트랩 관련 CDN Link    -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!--JQuery 관련 CDN Link    -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+
+
+    <script>
+
+        $(document).ready(function () {
+            movie_info(), start_comment()
+        });
+
+        function movie_info() {
+            let num = {{post_num}}
+            $.ajax({
+                type: "POST",
+                url: "/movieinfo/watch",
+                data: {
+                    rank_give: num
+                },
+                success: function (response) {
+                    let rows = response['movie_info']
+
+                    let movie_Ktitle = rows['영화제목']
+                    // let movie_Etitle = rows['movie_Etitle']
+
+                    let movie_direc = rows['감독']
+
+                    let movie_people = rows['배우']
+
+                    let movie_genre = rows['장르']
+
+                    if ((movie_direc ) === undefined) {
+                        movie_direc = ""
+                    }
+                    if ((movie_people ) === undefined) {
+                        movie_people = ""
+                    }
+                    if (movie_genre === undefined) {
+                        movie_genre = ""
+                    }
+
+                    let movie_age_showT_Nation = rows['기본']
+                    let movie_openDt = rows['개봉']
+                    let movie_image = rows['포스터']
+                    let movie_des = rows['영화설명']
+
+                    let title =
+                        `<h1>${movie_Ktitle}</h1>`
+                    // <h6>${movie_Etitle}</h6>
+
+                    let image =
+                        `<img src=${movie_image}>`
+
+                    let des =
+                        `<h4>
+                            ${movie_des}
+                        </h4>`
+
+                    $('#movie_tilte').append(title)
+                    $('#movie_people').append(`감독 : ${movie_direc} `)
+                    $('#movie_apeople').append(`배우: ${movie_people}`)
+                    $('#genre').append(`장르: ${movie_genre}`)
+                    $('#age_s_N').append(`/ 기본 : ${movie_age_showT_Nation}`)
+                    $('#openDt').append(`개봉 : ${movie_openDt}`)
+                    $('#moviePost').prepend(image)
+                    $('#des').append(des)
+
+                }
+            })
+        }
+
+        function start_comment() {
+            let num = {{post_num}}
+            $.ajax({
+                type: "GET",
+                url: `/comment?rank=${num}`,
+                data: {},
+                success: function (response) {
+                    let rows = JSON.parse(response['comment'])
+                    for (let i = 0; i < rows.length; i++) {
+                        let comment = rows[i]['comment']
+                        let comment_id = rows[i]['_id']['$oid']
+                        let temp_html =
+                            `<div class="comment_list_line">
+                                <form action="comment/delete?num=${comment_id}" method="GET">
+                                    <ul>${comment}</ul>
+                                    <button type="submit" class="delete_comment">❌</button>
+                                </form>
+                            </div>`
+                        $('#comment_list_id').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function comment_val() {
+            let textarea = $('#comment').val()
+            let num = {{post_num}}
+            $.ajax({
+                type: 'POST',
+                url: '/comment',
+                data: {
+                    textarea_give: textarea,
+                    movieNum_give: num
+                },
+                success: function (response) {
+                    window.location.reload()
+                }
+            });
+        }
+
+        function delete_comment() {
+            $.ajax({
+                type: "GET",
+                url: "/comment/delete",
+                data: {},
+                success: function (response) {
+                    alert(response["msg"])
+                    //window.location.reload()
+                }
+            });
+        }
+
+    </script>
+
+    <style>
+        *{
+            font-family: 'Nanum Pen Script', cursive;
+        }
+
+        #movie_apeoples {
+            width: 1020px;
+            white-space: normal;
+        }
+
+        #moviePost {
+            display: flex;
+            flex-direction: row;
+        }
+
+        img {
+            margin-top: 40px;
+            width: 250px;
+            height: 280px;
+            margin-left: 16%;
+            background-size: cover;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+        }
+
+        #info {
+            margin-top: 35px;
+            max-width: 505px;
+            white-space: nowrap;
+        }
+
+        .div {
+            margin-left: 30px;
+            width: 1020px;
+        }
+
+        .resV {
+            background-color: tomato;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: inherit;
+            border-radius: 5px;
+            width: 70px;
+            height: 30px;
+        }
+
+        /*여기까지가 포스팅*/
+        #des {
+            margin: 70px auto 0 16%;
+            width: 640.2px;
+        }
+
+        /*여기까지 description*/
+        .textarea-box {
+            margin: 100px 0 50px 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        textarea {
+            width: 390px;
+            height: 180px;
+            padding: 10px 0 0 10px;
+        }
+
+        .textarea-box > div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .addComment {
+            background-color: tomato;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: inherit;
+            border-radius: 5px;
+            margin-top: 17px;
+            width: 100px;
+            height: 30px;
+        }
+
+        .btn-box {
+            display: flex;
+            justify-content: center;
+        }
+
+        .comment_list {
+            margin-bottom: 100px;
+            display: flex;
+            justify-content: center;
+            border-style: solid;
+            max-width: 1020px;
+            width: 95%;
+        }
+
+        form {
+            display: flex;
+            justify-content: space-between;
+            border-bottom-style: solid;
+            font-size: 25px;
+            margin: 30px 0;
+        }
+
+        .comment_list_box {
+            display: flex;
+            justify-content: center;
+        }
+
+        #comment_list_id {
+            max-width: 920px;
+            width: 95%;
+            padding: inherit;
+        }
+
+        .delete_comment {
+            background-color: inherit;
+            border-style: none;
+            font-size: 20px;
+        }
+
+        /*여기까지 textara와 comment*/
+
+    </style>
+</head>
+<body>
+<div id="header">
+
+</div>
+
+<main id="main">
+    <div id="moviePost">
+
+        <div id="info">
+            <span>
+                <ul>
+                    <span id="movie_tilte">
+
+                    </span>
+                </ul>
+
+                <ul id="star">
+
+                </ul>
+
+                <hr class="div">
+
+                <ul>
+                    <h5>
+                        <span id="movie_people"></span> <span id="movie_company"></span>
+                    </h5>
+                </ul>
+                <ul>
+                    <h5 id="movie_apeoples">
+                        <span id="movie_apeople"></span>
+                    </h5>
+                </ul>
+                <ul>
+                    <h5>
+                        <span id="genres">
+                            <span id="genre"></span>
+                        </span>
+                        <span id="age_s_N"></span>
+                    </h5>
+                </ul>
+                <ul>
+                    <h5 id="openDt">
+                    </h5>
+                </ul>
+
+                <ul>
+                    <h5><button class="resV">예매하기</button></h5>
+                </ul>
+            </span>
+        </div>
+    </div>
+
+    <div id="des">
+    </div>
+
+    <div class="textarea-box">
+        <div>
+            <textarea id="comment" placeholder="Write a comment"></textarea>
+            <div class="btn-box">
+                <button onclick="comment_val()" type="button" class="addComment">Add comment</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment_list_box">
+        <div class="comment_list">
+            <ul id="comment_list_id">
+            </ul>
+        </div>
+    </div>
+
+</main>
+
+<div id="footer">
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#header").load("./header");  // 원하는 파일 경로를 삽입하면 된다
+        $("#footer").load("./footer");  // 추가 인클루드를 원할 경우 이런식으로 추가하면 된다
+    });
+</script>
+<link rel="script" type="text/html" href="header.html">
+</body>
+</html>
