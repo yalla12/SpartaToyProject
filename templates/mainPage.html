@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--부트스트랩 관련 CDN Link    -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!--JQuery 관련 CDN Link    -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+    <!-- owl caroseul    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+          integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+          integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <!--  css_style -->
+    <style>
+        /*<!-- 영화 list_nav 바 관련 -->*/
+        .owl-prev > span, .owl-next > span {
+            font-size: 20px;
+        }
+        .owl-prev, .owl-next {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+        }
+
+        /*영화 동영상 기본 정보 일단 보류 ..*/
+        .movieSelection_title {
+            white-space:nowrap;
+            position: absolute;
+            top: 170px;
+            left: 150px;
+            font-weight: 700;
+            font-size: 30px;
+            color: #fff;
+            line-height: 1.450em;
+            text-shadow: 2px 2px 4px rgb(0 0 0 / 72%);
+            z-index: 2;
+            /* animation: tt1 1s 3s ease-in forwards; */
+            pointer-events: none;
+        }
+        /*비디오 관련*/
+        video{
+            width: 100%; height: 30vw
+
+        }
+        .card-detail{
+            color: white;
+            white-space:nowrap ;
+        }
+        /*영화 list cards btn 관련*/
+        .btn-group>button{
+            font-size: 1vw;
+        }
+        .movie_list_wrap{
+            margin:0 50px 0;
+        }
+    </style>
+</head>
+
+<body>
+<div id="header">
+
+</div>
+
+<main>
+
+    <div class="video-wrap" style="background-color: black;" >
+        <div class="container" style="position:relative;">
+            <video muted="muted"
+                   controls="true"
+                   loop="true"
+            >
+                <source type="video/mp4">
+
+            </video>
+<!--                            <strong id="ctl00_PlaceHolderContent_AD_MOVIE_NM" class="movieSelection_title">극장판 윌벤져스-수상한 캠핑 대소동</strong>-->
+        </div>
+
+    </div>
+
+
+    <div class="container">
+        <div class="py-3 px-5">
+            <span class="fs-5 text-primary">🔥 무비 차트</span>
+        </div>
+
+    </div>
+    <!--이미지 슬라이더 owl-carousel 사용    -->
+    <div class="movie_list_wrap" >
+        <div class="container px-5">
+            <div class="owl-carousel owl-theme owl-loaded">
+                <div class="owl-stage-outer">
+                    <div class="owl-stage" id="slider-container">
+
+                    </div>
+                </div>
+                <div class="owl-controls">
+                    <div class="owl-nav">
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</main>
+<div id="footer">
+
+</div>
+
+<!--header-footer 삽입-->
+<script>
+    $(document).ready(function () {
+        $("#header").load("./header");  // 원하는 파일 경로를 삽입하면 된다
+        $("#footer").load("./footer");  // 추가 인클루드를 원할 경우 이런식으로 추가하면 된다
+    });
+
+</script>
+<link rel="script" type="text/html" href="header.html">
+<!--owl carosuel  JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!--owl carosuel & recent movie data ajax & movie_url-->
+<script>
+    $.ajax({
+        type: "GET",
+        url: "./crawling_movie",
+        success: function (response) {
+            console.log(response)
+            console.log(response[response.length - 1]['movie_url'])
+            $('video>source')[0].src = response[response.length - 1]['movie_url']
+            $('video').get(0).load()
+            $('video').get(0).play()
+            movie_info_insert(response)
+        }
+    })
+    function movie_info_insert(response) {
+        for (let i = 0; i < response.length - 1; i++) {
+            let image = response[i]['포스터']
+            let title = response[i]['영화제목']
+            let booking_rate = response[i]['예매율']
+            let rank=response[i]['순위']
+
+            if (title.length >= 13) {
+                title = title.substring(0, 13) + "..."
+            }
+
+            let temp_html = ` <div class="owl-item">
+                <div class="movie" style="background-color: black">
+                    <img src=${image}
+                         class="card-img-top" alt="..." width="100%" height="225" style="  object-fit: contain">
+                    <div class="card-body">
+                        <p class="card-text">
+                        <div class="card-detail">${(i + 1) + "." + title}</div>
+                        <div class="card-detail">
+                            <span>예매율 : ${booking_rate}</span>
+                        </div>
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-outline-secondary text-white">예매하기</button>
+                                <button onclick="move_movie_info(${rank})" type="button" class="btn btn-outline-secondary text-white">상세정보</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            $('#slider-container').append(temp_html)
+        }
+        setting_owl_carousel()
+    }
+    function setting_owl_carousel() {
+        $('.owl-carousel').owlCarousel({
+            loop: false,
+            margin: 10,
+            nav: true,
+            dots: false,
+            autoWidth: false,
+            items: 5,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 3
+                },
+                1100: {
+                    items: 5
+                }
+            }
+        })
+    }
+    function move_movie_info(rank){
+        window.location.href='/movieInfo?rank='+rank
+    }
+</script>
+
+
+</body>
+</html>
