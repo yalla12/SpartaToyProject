@@ -7,6 +7,14 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 
+# 크롤링임포트
+import requests
+from bs4 import BeautifulSoup
+
+#db연결
+from pymongo import MongoClient
+client = MongoClient('mongodb+srv://test:sparta@cluster0.if3gw.mongodb.net/Cluster0?retryWrites=true&w=majority')
+db = client.dbsparta
 
 # rendering (html 파일 넘겨주기)
 @app.route('/')
@@ -16,12 +24,26 @@ def home():
 
 @app.route('/header')
 def header():
-    return render_template('header.html')
+    return render_template('header_hyunjee.html')
 
 
 @app.route('/footer')
 def footer():
     return render_template('footer.html')
+
+@app.route("/login", methods=["POST"])
+def login():
+    # id,pw_give 를 받아와서 doc (db에 저장)
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+
+    doc = {
+        'id': id_receive,
+        'pw': pw_receive,
+    }
+    db.login.insert_one(doc)
+    return jsonify({'msg': '회원가입을 축하드립니다! '
+})
 
 
 if __name__=='__main__':
