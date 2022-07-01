@@ -15,132 +15,86 @@
     <script>
 
         $(document).ready(function () {
-            set_temp(), start_comment()
+            movie_info(), start_comment()
         });
-        let today = new Date();
-        let year = today.getFullYear();
-        let month = ('0' + (today.getMonth() + 1)).slice(-2);
-        let day = ('0' + today.getDate()).slice(-2);
 
-        let dateString = (year + month + day) - 1;
-
-        function set_temp() {
-            document.getElementById('main').style.visibility = "hidden";
-
+        function movie_info() {
+            let num = {{post_num}}
             $.ajax({
-                type: "GET",
-                url: `http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=6fd6a893f79c7c69333f1bd25555fd4c&targetDt=${dateString}`,
-                data: {},
+                type: "POST",
+                url: "/movieinfo/watch",
+                data: {
+                    rank_give: num
+                },
                 success: function (response) {
-                    let rows = response['boxOfficeResult']['dailyBoxOfficeList'][0]
-                    let movie_code = rows['movieCd']
-                    movie_code_info(movie_code)
+                    let rows = response['movie_info']
+
+                    let movie_Ktitle = rows['영화제목']
+                    // let movie_Etitle = rows['movie_Etitle']
+
+                    let movie_direc = rows['감독']
+
+                    let movie_people = rows['배우']
+
+                    let movie_genre = rows['장르']
+
+                    if ((movie_direc ) === undefined) {
+                        movie_direc = ""
+                    }
+                    if ((movie_people ) === undefined) {
+                        movie_people = ""
+                    }
+                    if (movie_genre === undefined) {
+                        movie_genre = ""
+                    }
+
+                    let movie_age_showT_Nation = rows['기본']
+                    let movie_openDt = rows['개봉']
+                    let movie_image = rows['포스터']
+                    let movie_des = rows['영화설명']
+
+                    let title =
+                        `<h1>${movie_Ktitle}</h1>`
+                    // <h6>${movie_Etitle}</h6>
+
+                    let image =
+                        `<img src=${movie_image}>`
+
+                    let des =
+                        `<h4>
+                            ${movie_des}
+                        </h4>`
+
+                    $('#movie_tilte').append(title)
+                    $('#movie_people').append(`감독 : ${movie_direc} `)
+                    $('#movie_apeople').append(`배우: ${movie_people}`)
+                    $('#genre').append(`장르: ${movie_genre}`)
+                    $('#age_s_N').append(`/ 기본 : ${movie_age_showT_Nation}`)
+                    $('#openDt').append(`개봉 : ${movie_openDt}`)
+                    $('#moviePost').prepend(image)
+                    $('#des').append(des)
+
                 }
             })
         }
 
-        function movie_code_info(movie_code) {
-            $.ajax({
-                type: "GET",
-                url: `http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=6fd6a893f79c7c69333f1bd25555fd4c&movieCd=${movie_code}`,
-                data: {},
-                success: function (response) {
-                    let rows = response['movieInfoResult']['movieInfo']
-                    let movie_Kname = rows['movieNm']
-                    let movie_Ename = rows['movieNmEn']
-
-                    let temp_html_title =
-                        `<h1>${movie_Kname}</h1>
-                        <h6>${movie_Ename}</h6>`
-                    $('#movie_tilte').append(temp_html_title)
-
-                    $('#movie_apeoples').prepend("배우 : ")
-                    $('#genres').prepend("장르 :")
-
-                    let movie_apeoples = rows['actors']
-                    for (let i = 0; i < movie_apeoples.length; i++) {
-                        let movie_apeople = movie_apeoples[i]['peopleNm']
-                        $('#movie_apeople').append(`${movie_apeople},`)
-                    }
-
-                    let movie_company = rows['companys'][0]['companyNm']
-                    $('#movie_company').append(`영화사 : ${movie_company}`)
-
-
-                    let movie_people = rows['directors'][0]['peopleNm']
-                    $('#movie_people').append(`감독 : ${movie_people} / `)
-
-
-                    let movie_genres = rows['genres']
-                    for (let i = 0; i < movie_genres.length; i++) {
-                        let movie_genre = movie_genres[i]['genreNm']
-                        $('#genre').append(`${movie_genre}`)
-                    }
-
-                    let movie_watchGrade = rows['audits'][0]['watchGradeNm']
-                    $('#watchGrade').append(`/ 기본 : ${movie_watchGrade}, `)
-
-                    let movie_showT = rows['showTm']
-                    $('#showT').append(`${movie_showT}분, `)
-
-                    let movie_nation = rows['nations'][0]['nationNm']
-                    $('#nation').append(`${movie_nation}`)
-
-                    let movie_openDt = rows['openDt']
-                    $('#openDt').append(`개봉 : ${movie_openDt}`)
-
-                    console.log(response)
-                }
-            }),
-                // movieCd에 따라서 if문을 사용한다. movieCd가 0이라면 페이지
-                $.ajax({
-                    type: "GET",
-                    url: "movie/info", //여기서 메인 페이지에 있는 영화 code를 가지고 와야 한다.url에 변수를 지정해서
-                    data: {}, // data안에 영화 code
-                    success: function (response) {
-
-                        let image = response['movie_info']['image']
-                        let star = response['movie_info']['star']
-                        let desc1 = response['movie_info']['desc1']
-                        let desc2 = response['movie_info']['desc2']
-
-
-                        let movie_des =
-                            `<h4>
-                            ${desc1}
-                            <br>
-                            <br>
-                            ${desc2}
-                        </h4>`
-                        $('#des').append(movie_des)
-
-                        let movie_image =
-                            `<img src=${image}>`
-                        $('#moviePost').prepend(movie_image)
-
-                        let movie_star =
-                            `<h4>평점 : ${star}</h4>`
-                        $('#star').append(movie_star)
-                    }
-                })
-            document.getElementById('main').style.visibility = "visible";
-        }
-
-
         function start_comment() {
+            let num = {{post_num}}
             $.ajax({
                 type: "GET",
-                url: "/comment",
+                url: `/comment?rank=${num}`,
                 data: {},
                 success: function (response) {
-                    let rows = response['comment']
+                    let rows = JSON.parse(response['comment'])
                     for (let i = 0; i < rows.length; i++) {
                         let comment = rows[i]['comment']
-                        let num = rows[i]['num']
+                        let comment_id = rows[i]['_id']['$oid']
                         let temp_html =
                             `<div class="comment_list_line">
-                                <ul>${comment}</ul>
-                                <button type="button" onclick="delete_comment(${num})" class="delete_comment">❌</button>
+                                <form action="comment/delete?num=${comment_id}" method="GET">
+                                    <ul>${comment}</ul>
+                                    <button type="submit" class="delete_comment">❌</button>
+                                </form>
                             </div>`
                         $('#comment_list_id').append(temp_html)
                     }
@@ -150,11 +104,13 @@
 
         function comment_val() {
             let textarea = $('#comment').val()
+            let num = {{post_num}}
             $.ajax({
                 type: 'POST',
                 url: '/comment',
                 data: {
                     textarea_give: textarea,
+                    movieNum_give: num
                 },
                 success: function (response) {
                     window.location.reload()
@@ -162,14 +118,14 @@
             });
         }
 
-        function delete_comment(num) {
+        function delete_comment() {
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: "/comment/delete",
-                data: {num_give: num},
+                data: {},
                 success: function (response) {
                     alert(response["msg"])
-                    window.location.reload()
+                    //window.location.reload()
                 }
             });
         }
@@ -177,7 +133,6 @@
     </script>
 
     <style>
-
 
         #movie_apeoples {
             width: 1020px;
@@ -191,8 +146,8 @@
 
         img {
             margin-top: 40px;
-            width: 280px;
-            height: 340px;
+            width: 250px;
+            height: 280px;
             margin-left: 16%;
             background-size: cover;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -268,7 +223,7 @@
             width: 95%;
         }
 
-        .comment_list_line {
+        form {
             display: flex;
             justify-content: space-between;
             border-bottom-style: solid;
@@ -334,9 +289,7 @@
                         <span id="genres">
                             <span id="genre"></span>
                         </span>
-                        <span id="watchGrade"></span>
-                        <span id="showT"></span>
-                        <span id="nation"></span>
+                        <span id="age_s_N"></span>
                     </h5>
                 </ul>
                 <ul>
