@@ -13,6 +13,10 @@ db = client.team_project
 
 app = Flask(__name__)
 
+# 크롤링임포트
+import requests
+from bs4 import BeautifulSoup
+
 
 # rendering (html 파일 넘겨주기)
 @app.route('/')
@@ -28,6 +32,7 @@ def header():
 @app.route('/footer')
 def footer():
     return render_template('footer.html')
+
 
 @app.route('/ticketing')
 def test():
@@ -58,6 +63,22 @@ def buy():
     db.movie.insert_one(doc)
 
     return jsonify({'msg': '예매 완료!'})
+
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    # id,pw_give 를 받아와서 doc (db에 저장)
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+
+    doc = {
+        'id': id_receive,
+        'pw': pw_receive,
+    }
+    db.login.insert_one(doc)
+    return jsonify({'msg': '회원가입을 축하드립니다! '
+})
 
 
 @app.route('/crawling_movie', methods=['GET'])
