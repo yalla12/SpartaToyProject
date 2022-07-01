@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, escape
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
 import requests
 
+
 # 공용 DB 선정 해서 사용 해야함~
+# client = MongoClient('mongodb+srv://yalla12:tlstjsgh12!@cluster0.nz4jt.mongodb.net/Cluster0?retryWrites=true&w=majority')
+# db = client.dbsparta
 client = MongoClient('mongodb+srv://team_project:sparta1234@cluster0.10xkhtt.mongodb.net/?retryWrites=true&w=majority')
 db = client.team_project
 
@@ -18,7 +21,7 @@ from bs4 import BeautifulSoup
 # rendering (html 파일 넘겨주기)
 @app.route('/')
 def home():
-    return render_template('mainPage.html')
+    return render_template('mainpage.html')
 
 
 @app.route('/header')
@@ -29,6 +32,38 @@ def header():
 @app.route('/footer')
 def footer():
     return render_template('footer.html')
+
+
+@app.route('/ticketing')
+def test():
+    return render_template('Sunho/ticketing.html')
+
+@app.route("/buy", methods=["POST"])
+def buy():
+    seat_receive = request.form['seat_give']
+    time_receive = request.form['time_give']
+    title_receive = request.form['title_give']
+
+    if seat_receive == "":
+        return jsonify({'msg': '좌석을 선택해주세요'})
+
+    if time_receive == "":
+        return jsonify({'msg': '상영시간을 선택해주세요'})
+
+    movie_list = list(db.movie.find({"seat": seat_receive, "time": time_receive, "title": title_receive}, {'_id': False}))
+    count = len(movie_list)
+    if count > 0:
+        return jsonify({'msg': '이미 예매된 좌석입니다.'})
+
+    doc = {
+        'seat': seat_receive,
+        'time': time_receive,
+        'title': title_receive
+    }
+    db.movie.insert_one(doc)
+
+    return jsonify({'msg': '예매 완료!'})
+
 
 
 @app.route("/login", methods=["POST"])
@@ -44,6 +79,7 @@ def login():
     db.login.insert_one(doc)
     return jsonify({'msg': '회원가입을 축하드립니다! '
 })
+
 
 @app.route('/crawling_movie', methods=['GET'])
 def crawling_movie():
@@ -83,6 +119,5 @@ def crawling():
     #     doc.append(movie_data)
     return movie_url
 
-
-if __name__ =='__main__':
+if __name__=='__main__':
     app.run('0.0.0.0',port=5000,debug=True)

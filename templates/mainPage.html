@@ -206,7 +206,7 @@
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-outline-secondary text-white">예매하기</button>
+                                <button onclick="buy('${image}', '${title}','${rank}', '${booking_rate}')" type="button" class="btn btn-outline-secondary text-white">예매하기</button>
                                 <button onclick="move_movie_info(${rank})" type="button" class="btn btn-outline-secondary text-white">상세정보</button>
                             </div>
 
@@ -241,6 +241,10 @@
     }
     function move_movie_info(rank){
         window.location.href='/movieInfo?rank='+rank
+    }
+
+    function buy(image, title, rank, rate){
+        window.location.href='/ticketing?image='+image +'&title='+title +'&rank='+rank +'&rate='+rate
     }
 </script>
 
