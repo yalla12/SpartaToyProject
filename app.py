@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 # 크롤링임포트
 import requests
@@ -68,12 +69,22 @@ def buy():
     return jsonify({'msg': '예매 완료!'})
 
 
-@app.route("/login", methods=["POST"])
-def login():
-    # id,pw_give 를 받아와서 doc (db에 저장)
+@app.route("/join", methods=["POST"])
+def join():
+    # id,pw_give 를 받아와서
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
 
+    if id_receive == "":
+        return jsonify({'msg': '이메일을 입력해주세요'})
+
+    join_list = list(
+        db.login.find({"id": id_receive}, {'_id': False}))
+    count = len(join_list)
+    if count > 0:
+        return jsonify({'msg': ' 중복된 아이디입니다. '})
+
+    #db에저장
     doc = {
         'id': id_receive,
         'pw': pw_receive,
@@ -81,6 +92,27 @@ def login():
     db.login.insert_one(doc)
     return jsonify({'msg': '회원가입을 축하드립니다! '
                     })
+
+@app.route("/login", methods=["POST"])
+def login():
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+
+    login_list = list(
+        db.login.find({"id": id_receive, "pw" : pw_receive }, {'_id': False}))
+    count = len(login_list)
+    if count > 0:
+        return jsonify({'msg': ' 님 환영합니다 ! '})
+
+
+@app.route("/loginpage")
+def loginpage():
+    return render_template('login.html')
+
+@app.route("/signuppage")
+def signuppage():
+    return render_template('signup.html')
+
 
 
 @app.route('/crawling_movie', methods=['GET'])
@@ -159,12 +191,12 @@ def movie_post():
     return jsonify({'msg': '저장완료'})
 
 
-@app.route("/comment/delete", methods=["POST"])
+@app.route("/movieInfo", methods=["POST"])
 def dlelete_comment():
-    # num_receive = request.args.get('num')
-    # print(num_receive)
-    # db.comment.delete_one({'_id': num_receive})
-    return render_template('sanghyun_watch.html')
+    num_receive = request.args.get('id')
+    post_num = request.args.get('rank')
+    db.comment.delete_one({'_id': ObjectId(num_receive)})
+    return render_template('sanghyun_watch.html', post_num=post_num)
 
 
 # 영화 api

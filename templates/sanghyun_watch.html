@@ -92,7 +92,7 @@
                         let comment_id = rows[i]['_id']['$oid']
                         let temp_html =
                             `<div class="comment_list_line">
-                                <form action="comment/delete?num=${comment_id}" method="GET">
+                                <form action="/movieInfo?rank=${num}&id=${comment_id}" method="POST">
                                     <ul>${comment}</ul>
                                     <button type="submit" class="delete_comment">❌</button>
                                 </form>
@@ -121,12 +121,12 @@
 
         function delete_comment() {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "/comment/delete",
                 data: {},
                 success: function (response) {
-                    alert(response["msg"])
-                    //window.location.reload()
+                    console.log(response)
+                    window.location.reload()
                 }
             });
         }
