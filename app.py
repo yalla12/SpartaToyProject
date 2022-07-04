@@ -94,7 +94,7 @@ def join():
     return jsonify({'msg': '회원가입을 축하드립니다! '
                     })
 
-@app.route("/login")
+@app.route("/login", methods=["POST"])
 def login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
@@ -105,8 +105,7 @@ def login():
     if count > 0:
         return jsonify({'msg': ' 중복된 아이디입니다. '})
 
-    return jsonify({'msg': '회원가입을 축하드립니다! '
-                    })
+    return jsonify({'msg': '님 환영합니다 !' })
 
 
 @app.route("/loginpage")
