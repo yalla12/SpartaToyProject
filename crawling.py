@@ -11,7 +11,6 @@ import requests
 import os
 import pprint
 import urllib.request
-
 # DB접근 관련
 client = MongoClient('mongodb+srv://team_project:sparta1234@cluster0.10xkhtt.mongodb.net/?retryWrites=true&w=majority')
 db = client.team_project
@@ -23,7 +22,7 @@ chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-setuid-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_experimental_option('excludeSwitches',['enable-logging'])
+chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 driver = webdriver.Chrome('chromedriver', options=chrome_options)
 
@@ -122,8 +121,8 @@ def check_DB_status():
 def start_crawling():
     # 영화 상세보기 페이지로 이동.
     items = len(list(driver.find_elements(By.CSS_SELECTOR, "div.swiper-slide-movie")))
-    status=check_DB_status()
-    for i in range(0, items):
+    status = check_DB_status()
+    for i in range(0, items-1):
         # 페이지 이동 함수
         move_to_page(i)
         driver.implicitly_wait(1.5)
@@ -136,6 +135,7 @@ def start_crawling():
         driver.back()
         driver.implicitly_wait(3)
     driver.quit()
+    exit()
 
 
 start_crawling()
