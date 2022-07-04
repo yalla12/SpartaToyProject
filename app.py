@@ -1,20 +1,16 @@
 from flask import Flask, render_template, request, jsonify
 from bson.json_util import dumps
 
+# 크롤링임포트
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
-
+import urllib3
 
 client = MongoClient('mongodb+srv://team_project:sparta1234@cluster0.10xkhtt.mongodb.net/?retryWrites=true&w=majority')
 db = client.team_project
 
-
 app = Flask(__name__)
-
-# 크롤링임포트
-import requests
-from bs4 import BeautifulSoup
 
 
 # rendering (html 파일 넘겨주기)
@@ -38,9 +34,11 @@ def test():
     post_num = request.args.get('rank')
     return render_template('sanghyun_watch.html', post_num=post_num)
 
+
 @app.route('/ticketing')
 def tiketing():
     return render_template('Sunho/ticketing.html')
+
 
 @app.route("/buy", methods=["POST"])
 def buy():
@@ -54,7 +52,8 @@ def buy():
     if time_receive == "":
         return jsonify({'msg': '상영시간을 선택해주세요'})
 
-    movie_list = list(db.movie.find({"seat": seat_receive, "time": time_receive, "title": title_receive}, {'_id': False}))
+    movie_list = list(
+        db.movie.find({"seat": seat_receive, "time": time_receive, "title": title_receive}, {'_id': False}))
     count = len(movie_list)
     if count > 0:
         return jsonify({'msg': '이미 예매된 좌석입니다.'})
@@ -69,7 +68,6 @@ def buy():
     return jsonify({'msg': '예매 완료!'})
 
 
-
 @app.route("/login", methods=["POST"])
 def login():
     # id,pw_give 를 받아와서 doc (db에 저장)
@@ -82,7 +80,7 @@ def login():
     }
     db.login.insert_one(doc)
     return jsonify({'msg': '회원가입을 축하드립니다! '
-})
+                    })
 
 
 @app.route('/crawling_movie', methods=['GET'])
@@ -92,6 +90,7 @@ def crawling_movie():
     doc.append({'movie_url': movie_url})
     return jsonify(doc)
 
+
 # @app.route('/movieInfo', methods=['GET'])
 # def movie_info():
 #     print(request.args.get('rank'))
@@ -100,17 +99,28 @@ def get_movie_data():
     movie_data = list(db.movieDatas.find({}, {"_id": False}))
     return movie_data
 
+
 def crawling():
+
     # 크롤링 관련
+    requests.packages.urllib3.disable_warnings()
+    requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
-    # 크롤링 할 페이지 url
     url = "https://www.cgv.co.kr/"
-    data = requests.get(url, headers=headers)
+    try:
+        requests.packages.urllib3.contrib.pyopenssl.DEFAULT_SSL_CIPHER_LIST += 'HIGH:!DH:!aNULL'
+    except AttributeError:
+        # no pyopenssl support used / needed / available
+        pass
+    # 크롤링 할 페이지 url
+    data = requests.get(url, verify=False)
+
+    # data = requests.get(url,  headers=headers,verify=False)
     # beautifulSoup를 활용해서 html파일로 변경해줌
     soup = BeautifulSoup(data.text, 'html.parser')
-    movie_url =soup.select_one('div.video_wrap>video >source')['src']
+    movie_url = soup.select_one('div.video_wrap>video >source')['src']
     # print(soup)
     # recent_movies = soup.select('div.swiper-slide-movie')
     # doc = []
@@ -122,6 +132,7 @@ def crawling():
     #     movie_data = {'title': title, 'image': image, 'booking_rate': booking_rate}
     #     doc.append(movie_data)
     return movie_url
+
 
 # 댓글
 @app.route("/comment", methods=["GET"])
@@ -150,8 +161,8 @@ def movie_post():
 
 @app.route("/comment/delete", methods=["POST"])
 def dlelete_comment():
-    #num_receive = request.args.get('num')
-    #print(num_receive)
+    # num_receive = request.args.get('num')
+    # print(num_receive)
     # db.comment.delete_one({'_id': num_receive})
     return render_template('sanghyun_watch.html')
 
