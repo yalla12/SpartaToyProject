@@ -103,9 +103,7 @@ def login():
         db.login.find({"id": id_receive, "pw" : pw_receive }, {'_id': False}))
     count = len(login_list)
     if count > 0:
-        return jsonify({'msg': ' 중복된 아이디입니다. '})
-
-    return jsonify({'msg': '님 환영합니다 !' })
+        return jsonify({'msg': ' 님 환영합니다 ! '})
 
 
 @app.route("/loginpage")
