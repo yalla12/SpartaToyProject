@@ -76,6 +76,9 @@ def join():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
 
+    if id_receive == "":
+        return jsonify({'msg': '이메일을 입력해주세요'})
+
     join_list = list(
         db.login.find({"id": id_receive}, {'_id': False}))
     count = len(join_list)
@@ -90,6 +93,21 @@ def join():
     db.login.insert_one(doc)
     return jsonify({'msg': '회원가입을 축하드립니다! '
                     })
+
+@app.route("/login")
+def login():
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+
+    login_list = list(
+        db.login.find({"id": id_receive, "pw" : pw_receive }, {'_id': False}))
+    count = len(login_list)
+    if count > 0:
+        return jsonify({'msg': ' 중복된 아이디입니다. '})
+
+    return jsonify({'msg': '회원가입을 축하드립니다! '
+                    })
+
 
 @app.route("/loginpage")
 def loginpage():
