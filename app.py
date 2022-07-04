@@ -100,6 +100,9 @@ def login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
 
+    if id_receive == "":
+        return jsonify({'msg': '아이디를 입력해주세요 '})
+
     login_list = list(
         db.login.find({"id": id_receive, "pw" : pw_receive }, {'_id': False}))
     count = len(login_list)
