@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 
 import requests
 from bs4 import BeautifulSoup
@@ -178,12 +179,12 @@ def movie_post():
     return jsonify({'msg': '저장완료'})
 
 
-@app.route("/comment/delete", methods=["POST"])
+@app.route("/movieInfo", methods=["POST"])
 def dlelete_comment():
-    #num_receive = request.args.get('num')
-    #print(num_receive)
-    # db.comment.delete_one({'_id': num_receive})
-    return render_template('sanghyun_watch.html')
+    num_receive = request.args.get('id')
+    post_num = request.args.get('rank')
+    db.comment.delete_one({'_id': ObjectId(num_receive)})
+    return render_template('sanghyun_watch.html', post_num=post_num)
 
 
 # 영화 api
